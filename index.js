@@ -7,19 +7,14 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors());
-
-// Serve os arquivos da pasta public
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Página de validação
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'aparencia.html'));
 });
 
-// Configuração de upload
 const upload = multer({ dest: 'uploads/' });
 
-// API para validação
 app.post('/enviar', upload.single('foto'), async (req, res) => {
   const caminho = req.file.path;
   const resultado = await validarImagem(caminho);
@@ -31,4 +26,7 @@ app.post('/enviar', upload.single('foto'), async (req, res) => {
   }
 });
 
-module.exports = app;
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
